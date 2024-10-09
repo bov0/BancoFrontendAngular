@@ -1,0 +1,38 @@
+<div class="flex w-full items-center justify-center ">
+    <app-avatar [brnMenuTriggerFor]="menu">Open</app-avatar>
+  </div>
+  <ng-template #menu>
+    <hlm-menu class="w-56">
+      <hlm-menu-label class="text-center">{{ authService.username }}</hlm-menu-label>
+      <hlm-menu-separator />
+  
+      <!-- Opciones si la sesión está iniciada -->
+      <hlm-menu-group *ngIf="isLoggedIn; else notLoggedIn">
+        <a routerLink="/profile" hlmMenuItem>
+          <hlm-icon name="lucideUser" hlmMenuIcon />
+          <span>Profile</span>
+        </a>
+        
+        <button hlmMenuItem (click)="logout()">
+          <hlm-icon name="lucideLogOut" hlmMenuIcon />
+          <span>Logout</span>
+        </button>
+      </hlm-menu-group>
+  
+      <ng-template #notLoggedIn>
+        <hlm-menu-group>
+          <a routerLink="/login" hlmMenuItem>
+            <hlm-icon name="lucideUser" hlmMenuIcon />
+            <span>Iniciar sesión</span>
+          </a>
+  
+          <a routerLink="/register" hlmMenuItem>
+            <hlm-icon name="lucidePlus" hlmMenuIcon />
+            <span>Registrarse</span>
+          </a>
+        </hlm-menu-group>
+      </ng-template>
+  
+      <hlm-menu-separator />
+    </hlm-menu>
+  </ng-template>  
