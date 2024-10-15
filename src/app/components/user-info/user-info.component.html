@@ -1,1 +1,35 @@
-<p>{{authService.username}}</p>
+<div class="user-info-wrapper flex flex-col items-center justify-center w-dvw">
+  <h1 class="w-full py-6 text-left font-bold text-3xl">
+    DATOS DEL USUARIO: {{ authService.username.toUpperCase() }}
+  </h1>
+
+  <div class="cuentasBancariasWrapper w-3/6">
+  <h2 class="w-full pb-3 text-left text-2xl font-semibold">Cuentas</h2>
+    <div class="flex p-6 gap-6">
+      <div *ngFor="let cuenta of cuentasBancarias">
+        <app-cuentaCard
+          [numeroTarjeta]="cuenta.numeroCuenta"
+          [saldo]="cuenta.saldo"
+          [tipoCuenta]="cuenta.tipoCuenta"
+          (click)="onCuentaSeleccionada(cuenta)">
+        </app-cuentaCard>
+      </div>
+    </div>
+  </div>
+
+  <div class="TransaccionesWrapper w-4/6">
+    <h2 *ngIf="cuentaSeleccionada" class="w-full pb-3 text-left text-2xl font-semibold">Transacciones</h2>
+    <div *ngIf="cuentaSeleccionada" class="w-full mb-6">
+      <h3 class="font-bold pb-6">Transacciones para cuenta {{ cuentaSeleccionada.numeroCuenta }}</h3>
+      <div *ngIf="!transacciones[cuentaSeleccionada.id] || transacciones[cuentaSeleccionada.id].length <= 0">
+          <p class="text-gray-400">No hay transacciones para la cuenta {{cuentaSeleccionada.numeroCuenta}}</p>
+      </div>
+  
+      <app-transacciones-table
+        *ngIf="transacciones[cuentaSeleccionada.id] && transacciones[cuentaSeleccionada.id].length > 0"
+        [transacciones]="transacciones[cuentaSeleccionada.id]"
+        [cuentaNumero]="cuentaSeleccionada.numeroCuenta">
+      </app-transacciones-table>
+    </div>
+  </div>
+</div>
