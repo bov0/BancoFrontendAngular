@@ -15,7 +15,8 @@ import { CommonModule } from '@angular/common';
   template: `
     <hlm-avatar variant="medium" class="m-0 p-0">
       <div></div>
-      <span 
+      <span
+        class="font-semibold"
         [class]="authService.isLoggedIn ? 'bg-white' : 'bg-red-500'" 
         hlmAvatarFallback>
         {{ authService.isLoggedIn ? authService.userInitials : 'RG' }}

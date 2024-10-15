@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
 })
 export class CuentaCardDetailsComponent {
   
-  @Input() numeroTarjeta!: string;
+  @Input() numeroCuenta!: string;
   @Input() saldo!: number;
   @Input() tipoCuenta!: string;
   

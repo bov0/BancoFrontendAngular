@@ -7,16 +7,19 @@ import { TableTransaccionesComponent } from '../transacciones-table/transaccione
 import { CommonModule } from '@angular/common';
 import { CuentaCardDetailsComponent } from '../cuenta-card-details/cuenta-card-details.component';
 import { SkeletonComponent } from '../skeleton/skeleton.component';
+import { TarjetaCardDetailsComponent } from '../tarjeta-card-details/tarjeta-card-details.component';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-user-info',
   standalone: true,
-  imports: [TableTransaccionesComponent,CuentaCardDetailsComponent,SkeletonComponent, CommonModule],
+  imports: [TableTransaccionesComponent,CuentaCardDetailsComponent,SkeletonComponent,TarjetaCardDetailsComponent,CommonModule],
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.css'],
 })
 export class UserInfoComponent {
   cuentasBancarias: any[] = [];
+  tarjetasCredito: any[] = [];
   transacciones: { [key: string]: any[] } = {};
   errorMessage: string | null = null;
   cuentaSeleccionada: any = null;
@@ -35,20 +38,49 @@ export class UserInfoComponent {
       const headers = new HttpHeaders({
         Authorization: `Bearer ${token}`
       });
-
+  
       this.http.get(`${environment.urlBackend}/api/cuentasBancarias/usuario/${this.authService.id}`, { headers })
         .subscribe({
           next: (res: any) => {
             this.cuentasBancarias = res;
-            console.log(res);
+            console.log('Cuentas bancarias:', this.cuentasBancarias);
+  
+            const tarjetasRequests = this.cuentasBancarias.map(cuenta => 
+              this.http.get(`${environment.urlBackend}/api/tarjetasCredito/cuenta/${cuenta.id}`, { headers })
+            );
+  
+            forkJoin(tarjetasRequests).subscribe({
+              next: (tarjetasRes: any) => {
+                this.tarjetasCredito = [].concat(...tarjetasRes);
+                console.log('Tarjetas de crédito cargadas:', this.tarjetasCredito);
+              },
+              error: (err:any) => {
+                console.error('Error al cargar tarjetas de crédito:', err);
+                this.errorMessage = 'No se pudieron cargar las tarjetas de crédito.';
+              }
+            });
           },
           error: (err) => {
-            console.error('Error:', err);
+            console.error('Error al cargar cuentas bancarias:', err);
             this.errorMessage = 'No se pudieron cargar las cuentas bancarias.';
           }
         });
     }
   }
+  
+  cargarTarjetasCredito(cuentaId: number, headers: HttpHeaders) {
+    this.http.get(`${environment.urlBackend}/api/tarjetasCredito/cuenta/${cuentaId}`, { headers })
+      .subscribe({
+        next: (res: any) => {
+          this.tarjetasCredito[cuentaId] = res;
+          console.log(`Tarjetas de crédito para la cuenta ${cuentaId}:`, res);
+        },
+        error: (err) => {
+          console.error(`Error al cargar tarjetas de crédito para la cuenta ${cuentaId}:`, err);
+          this.errorMessage = 'No se pudieron cargar las tarjetas de crédito.';
+        }
+      });
+  }  
 
   onCuentaSeleccionada(cuenta: any) {
     this.cuentaSeleccionada = cuenta;
@@ -64,6 +96,29 @@ export class UserInfoComponent {
           next: (res: any) => {
             this.transacciones[cuenta.id] = res;
             console.log('Transacciones para cuenta', cuenta.numeroCuenta, res);
+          },
+          error: (err) => {
+            console.error('Error al cargar transacciones:', err);
+            this.errorMessage = 'No se pudieron cargar las transacciones.';
+          }
+        });
+    }
+  }
+
+  onTarjetaSeleccionada(tarjeta: any) {
+    this.cuentaSeleccionada = tarjeta;
+    
+    if (!this.transacciones[tarjeta.id]) {
+      const token = this.authService.JWT;
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`
+      });
+
+      this.http.get(`${environment.urlBackend}/api/transacciones/tarjeta/${tarjeta.id}`, { headers })
+        .subscribe({
+          next: (res: any) => {
+            this.transacciones[tarjeta.id] = res;
+            console.log('Transacciones para cuenta', tarjeta.numeroCuenta, res);
           },
           error: (err) => {
             console.error('Error al cargar transacciones:', err);
