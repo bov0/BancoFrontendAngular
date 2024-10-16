@@ -1,4 +1,9 @@
-<app-navbar></app-navbar>
-<div class="w-full h-full flex justify-center items-center">
- <router-outlet/>
+<div class="w-full min-h-screen flex flex-col">
+ <app-navbar></app-navbar>
+ 
+ <div class="flex-grow w-full flex flex-col">
+   <router-outlet></router-outlet>
+ </div>
+
+ <app-footer></app-footer>
 </div>

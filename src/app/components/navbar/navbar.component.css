@@ -1,5 +1,4 @@
 .active {
-    color: white;
     font-weight: bolder;
     border-bottom: 3px solid #733aed;
     transition: all 0.3s ease, color 3s ease;

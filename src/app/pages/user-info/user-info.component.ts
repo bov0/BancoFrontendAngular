@@ -3,17 +3,18 @@ import { AuthService } from '../../auth.service';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { TableTransaccionesComponent } from '../transacciones-table/transacciones-table.component';
+import { TableTransaccionesComponent } from '../../components/transacciones-table/transacciones-table.component';
 import { CommonModule } from '@angular/common';
-import { CuentaCardDetailsComponent } from '../cuenta-card-details/cuenta-card-details.component';
-import { SkeletonComponent } from '../skeleton/skeleton.component';
-import { TarjetaCardDetailsComponent } from '../tarjeta-card-details/tarjeta-card-details.component';
+import { CuentaCardDetailsComponent } from '../../components/cuenta-card-details/cuenta-card-details.component';
+import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
+import { TarjetaCardDetailsComponent } from '../../components/tarjeta-card-details/tarjeta-card-details.component';
 import { forkJoin } from 'rxjs';
+import { ButtonComponent } from '../../components/button/button.component';
 
 @Component({
   selector: 'app-user-info',
   standalone: true,
-  imports: [TableTransaccionesComponent,CuentaCardDetailsComponent,SkeletonComponent,TarjetaCardDetailsComponent,CommonModule],
+  imports: [TableTransaccionesComponent,CuentaCardDetailsComponent,SkeletonComponent,TarjetaCardDetailsComponent,ButtonComponent,CommonModule],
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.css'],
 })

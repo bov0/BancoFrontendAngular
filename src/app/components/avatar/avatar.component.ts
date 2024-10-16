@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
     HlmAvatarFallbackDirective,
   ],
   template: `
-    <hlm-avatar variant="medium" class="m-0 p-0">
+    <hlm-avatar variant="medium" class="m-0 p-0 border-2 border-black">
       <div></div>
       <span
         class="font-semibold"
