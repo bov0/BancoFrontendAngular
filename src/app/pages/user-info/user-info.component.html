@@ -7,7 +7,16 @@
     <div class="cuentasBancariasWrapper w-full flex flex-col items-center justify-center">
       <div class="w-full pb-3 flex gap-3">
         <h2 class="text-left text-2xl font-semibold ml-5 sm:ml-0">Cuentas</h2>
-      <app-button [contenidoButton]="'Crear Cuenta'"></app-button>
+
+        <ng-template #crearCuentaModal>
+          <app-CrearCuentaForm></app-CrearCuentaForm>
+        </ng-template>
+        
+        <app-modal
+          [modalTitle]="'Crear nueva cuenta'"
+          [contenidoButton]="'Crear Cuenta'"
+          [contenidoModal]="crearCuentaModal">
+        </app-modal>
       </div>
       
         <div class="flex flex-col sm:flex-row p-6 gap-6 items-center justify-center w-full transition-all ease-in duration-100">
@@ -25,8 +34,16 @@
       <div class="tarjetasCreditoWrapper w-full h-full flex flex-col items-center justify-center">
         <div class="w-full pb-3 flex gap-3">
             <h2 class="pb-3 text-left text-2xl font-semibold">Tarjetas de crédito</h2>
-            <app-button [contenidoButton]="'Crear tarjeta'"></app-button>
-        </div>
+            <ng-template #crearTarjetaModal>
+          <app-CrearCuentaForm></app-CrearCuentaForm>
+        </ng-template>
+        
+        <app-modal
+          [modalTitle]="'Crear nueva tarjeta'"
+          [contenidoButton]="'Crear tarjeta'"
+          [contenidoModal]="crearCuentaModal">
+        </app-modal>
+          </div>
         <div class="flex flex-col sm:flex-row p-6 gap-6 items-center justify-center w-full transition-all ease-in duration-100">
           <div *ngFor="let tarjeta of tarjetasCredito">
             <app-tarjetaCard

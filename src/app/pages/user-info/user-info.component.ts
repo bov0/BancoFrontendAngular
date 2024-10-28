@@ -10,11 +10,13 @@ import { SkeletonComponent } from '../../components/skeleton/skeleton.component'
 import { TarjetaCardDetailsComponent } from '../../components/tarjeta-card-details/tarjeta-card-details.component';
 import { forkJoin } from 'rxjs';
 import { ButtonComponent } from '../../components/button/button.component';
+import { ModalComponent } from '../../components/modal/modal.component';
+import { CrearCuentaFormComponent } from '../../components/forms/crear-cuenta-form/crear-cuenta-form.component';
 
 @Component({
   selector: 'app-user-info',
   standalone: true,
-  imports: [TableTransaccionesComponent,CuentaCardDetailsComponent,SkeletonComponent,TarjetaCardDetailsComponent,ButtonComponent,CommonModule],
+  imports: [TableTransaccionesComponent,CuentaCardDetailsComponent,SkeletonComponent,TarjetaCardDetailsComponent,ButtonComponent,ModalComponent,CrearCuentaFormComponent,CommonModule],
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.css'],
 })
@@ -128,4 +130,5 @@ export class UserInfoComponent {
         });
     }
   }
+
 }
