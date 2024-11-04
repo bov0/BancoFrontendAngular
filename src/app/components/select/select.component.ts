@@ -1,26 +1,60 @@
+import { Component, Input, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { BrnSelectImports } from '@spartan-ng/ui-select-brain';
-import { HlmSelectImports } from '@spartan-ng/ui-select-helm';
 
 @Component({
   selector: 'app-select',
   standalone: true,
-  imports: [BrnSelectImports, HlmSelectImports,CommonModule],
+  imports: [CommonModule],
   template: `
-    <brn-select class="w-full" [placeholder]="selectPlaceHolder || 'Select an option'">
-      <hlm-select-trigger class="w-full">
-        <hlm-select-value />
-      </hlm-select-trigger>
-      <hlm-select-content>
-        <ng-container *ngFor="let option of options">
-          <hlm-option [value]="option">{{ option }}</hlm-option>
-        </ng-container>
-      </hlm-select-content>
-    </brn-select>
+    <div class="flex flex-col w-full">
+      <select (change)="onSelectChange($event)" class="w-full p-2 border rounded-lg bg-white">
+        <option value="">{{ selectPlaceHolder }}</option>
+        <option *ngFor="let option of options" [value]="option">{{ option }}</option>
+      </select>
+    </div>
   `,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => SelectComponent),
+      multi: true
+    }
+  ]
 })
-export class SelectComponent {
-  @Input() selectPlaceHolder: string = 'Select an option';
+export class SelectComponent implements ControlValueAccessor {
+  @Input() selectPlaceHolder: string = 'Selecciona una opción';
   @Input() options: string[] = [];
+
+  private _value: string | undefined;
+  onChange: (value: string | undefined) => void = () => {};
+  onTouched: () => void = () => {};
+
+  get value(): string | undefined {
+    return this._value;
+  }
+
+  set value(val: string | undefined) {
+    this._value = val;
+    this.onChange(val);
+    this.onTouched();
+  }
+
+  onSelectChange(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    this.value = target.value;
+    console.log("Cuenta seleccionada: ", this.value);
+  }
+
+  writeValue(value: string | undefined): void {
+    this.value = value;
+  }
+
+  registerOnChange(fn: (value: string | undefined) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
 }

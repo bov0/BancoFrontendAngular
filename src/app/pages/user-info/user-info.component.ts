@@ -8,15 +8,16 @@ import { CommonModule } from '@angular/common';
 import { CuentaCardDetailsComponent } from '../../components/cuenta-card-details/cuenta-card-details.component';
 import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
 import { TarjetaCardDetailsComponent } from '../../components/tarjeta-card-details/tarjeta-card-details.component';
-import { forkJoin } from 'rxjs';
+import { catchError, forkJoin, of, throwError } from 'rxjs';
 import { ButtonComponent } from '../../components/button/button.component';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { CrearCuentaFormComponent } from '../../components/forms/crear-cuenta-form/crear-cuenta-form.component';
+import { CrearTarjetaFormComponent } from '../../components/forms/crear-tarjeta-form/crear-tarjeta-form.component';
 
 @Component({
   selector: 'app-user-info',
   standalone: true,
-  imports: [TableTransaccionesComponent,CuentaCardDetailsComponent,SkeletonComponent,TarjetaCardDetailsComponent,ButtonComponent,ModalComponent,CrearCuentaFormComponent,CommonModule],
+  imports: [TableTransaccionesComponent,CuentaCardDetailsComponent,SkeletonComponent,TarjetaCardDetailsComponent,ButtonComponent,ModalComponent,CrearCuentaFormComponent,CrearTarjetaFormComponent,CommonModule],
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.css'],
 })
@@ -49,7 +50,17 @@ export class UserInfoComponent {
             console.log('Cuentas bancarias:', this.cuentasBancarias);
   
             const tarjetasRequests = this.cuentasBancarias.map(cuenta => 
-              this.http.get(`${environment.urlBackend}/api/tarjetasCredito/cuenta/${cuenta.id}`, { headers })
+              this.http.get(`${environment.urlBackend}/api/tarjetasCredito/cuenta/${cuenta.id}`, { headers }).pipe(
+                catchError((error) => {
+                  if (error.status === 404) {
+                    console.warn(`No se encontraron tarjetas de crédito para la cuenta ${cuenta.id}`);
+                    return of([]);
+                  } else {
+                    console.error('Error al cargar tarjetas de crédito:', error);
+                    return throwError(error);
+                  }
+                })
+              )
             );
   
             forkJoin(tarjetasRequests).subscribe({
@@ -57,7 +68,7 @@ export class UserInfoComponent {
                 this.tarjetasCredito = [].concat(...tarjetasRes);
                 console.log('Tarjetas de crédito cargadas:', this.tarjetasCredito);
               },
-              error: (err:any) => {
+              error: (err: any) => {
                 console.error('Error al cargar tarjetas de crédito:', err);
                 this.errorMessage = 'No se pudieron cargar las tarjetas de crédito.';
               }

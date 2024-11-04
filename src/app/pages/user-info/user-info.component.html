@@ -1,4 +1,4 @@
-<div class="user-info-wrapper flex flex-col lg:flex-row items-center justify-center w-dvw h-full md:flex-grow">
+<div class="user-info-wrapper flex flex-col lg:flex-row items-center justify-center w-full h-full md:flex-grow">
 
   <div class="CuentasTarjetasWrapper w-full lg:w-3/6 flex-col justify-center items-center h-full">
     <h1 class="w-full py-6 text-left font-bold text-3xl ml-5 sm:ml-0">
@@ -19,7 +19,7 @@
         </app-modal>
       </div>
       
-        <div class="flex flex-col sm:flex-row p-6 gap-6 items-center justify-center w-full transition-all ease-in duration-100">
+        <div class="flex flex-row overflow-y-auto p-6 gap-6 items-center w-full transition-all ease-in duration-100">
           <div *ngFor="let cuenta of cuentasBancarias">
             <app-cuentaCard
               [numeroCuenta]="cuenta.numeroCuenta"
@@ -35,16 +35,17 @@
         <div class="w-full pb-3 flex gap-3">
             <h2 class="pb-3 text-left text-2xl font-semibold">Tarjetas de crédito</h2>
             <ng-template #crearTarjetaModal>
-          <app-CrearCuentaForm></app-CrearCuentaForm>
+          <app-crearTarjetaForm></app-crearTarjetaForm>
         </ng-template>
         
         <app-modal
           [modalTitle]="'Crear nueva tarjeta'"
           [contenidoButton]="'Crear tarjeta'"
-          [contenidoModal]="crearCuentaModal">
+          [contenidoModal]="crearTarjetaModal">
         </app-modal>
           </div>
-        <div class="flex flex-col sm:flex-row p-6 gap-6 items-center justify-center w-full transition-all ease-in duration-100">
+        <div class="flex flex-row overflow-y-auto p-6 gap-6 items-center w-full transition-all ease-in duration-100">
+          <div class="w-full h-full bg-red-50"></div>
           <div *ngFor="let tarjeta of tarjetasCredito">
             <app-tarjetaCard
               [numeroTarjeta]="tarjeta.numeroTarjeta"
