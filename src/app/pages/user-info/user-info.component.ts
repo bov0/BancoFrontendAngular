@@ -13,19 +13,21 @@ import { ButtonComponent } from '../../components/button/button.component';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { CrearCuentaFormComponent } from '../../components/forms/crear-cuenta-form/crear-cuenta-form.component';
 import { CrearTarjetaFormComponent } from '../../components/forms/crear-tarjeta-form/crear-tarjeta-form.component';
+import { HlmCaptionComponent } from "../../../../components/ui-table-helm/src/lib/hlm-caption.component";
+import { RealizarTransferenciaFormComponent } from '../../components/forms/realizar-transferencia-form/realizar-transferencia-form.component';
 
 @Component({
   selector: 'app-user-info',
   standalone: true,
-  imports: [TableTransaccionesComponent,CuentaCardDetailsComponent,SkeletonComponent,TarjetaCardDetailsComponent,ButtonComponent,ModalComponent,CrearCuentaFormComponent,CrearTarjetaFormComponent,CommonModule],
+  imports: [TableTransaccionesComponent, CuentaCardDetailsComponent, SkeletonComponent, TarjetaCardDetailsComponent, ButtonComponent, ModalComponent, CrearCuentaFormComponent, CrearTarjetaFormComponent,RealizarTransferenciaFormComponent, CommonModule, HlmCaptionComponent],
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.css'],
 })
 export class UserInfoComponent {
   cuentasBancarias: any[] = [];
   tarjetasCredito: any[] = [];
-  transacciones: { [key: string]: any[] } = {};
-  errorMessage: string | null = null;
+  transacciones: any[] = [];
+  errorMessage: string = '';
   cuentaSeleccionada: any = null;
 
   constructor(
@@ -98,48 +100,44 @@ export class UserInfoComponent {
 
   onCuentaSeleccionada(cuenta: any) {
     this.cuentaSeleccionada = cuenta;
-    
-    if (!this.transacciones[cuenta.id]) {
-      const token = this.authService.JWT;
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`
-      });
 
-      this.http.get(`${environment.urlBackend}/api/transacciones/cuenta/${cuenta.id}`, { headers })
-        .subscribe({
-          next: (res: any) => {
-            this.transacciones[cuenta.id] = res;
-            console.log('Transacciones para cuenta', cuenta.numeroCuenta, res);
-          },
-          error: (err) => {
-            console.error('Error al cargar transacciones:', err);
-            this.errorMessage = 'No se pudieron cargar las transacciones.';
-          }
-        });
-    }
+    const token = this.authService.JWT;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    this.http.get(`${environment.urlBackend}/api/transacciones/cuenta/${cuenta.id}`, { headers })
+      .subscribe({
+        next: (res: any) => {
+          this.transacciones[cuenta.id] = res;
+          console.log('Transacciones para cuenta', cuenta.numeroCuenta, res);
+        },
+        error: (err) => {
+          console.error('Error al cargar transacciones:', err);
+          this.errorMessage = 'No se pudieron cargar las transacciones.';
+          this.transacciones[cuenta.id] = [];
+        }
+      });
   }
 
   onTarjetaSeleccionada(tarjeta: any) {
     this.cuentaSeleccionada = tarjeta;
-    
-    if (!this.transacciones[tarjeta.id]) {
-      const token = this.authService.JWT;
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`
+    const token = this.authService.JWT;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    this.http.get(`${environment.urlBackend}/api/transacciones/tarjeta/${tarjeta.id}`, { headers })
+      .subscribe({
+        next: (res: any) => {
+          this.transacciones[tarjeta.id] = res;
+          console.log('Transacciones para tarjeta', tarjeta.numeroTarjeta, res);
+        },
+        error: (err) => {
+          console.error('Error al cargar transacciones:', err);
+          this.errorMessage = 'No se pudieron cargar las transacciones.';
+          this.transacciones[tarjeta.id] = [];
+        }
       });
-
-      this.http.get(`${environment.urlBackend}/api/transacciones/tarjeta/${tarjeta.id}`, { headers })
-        .subscribe({
-          next: (res: any) => {
-            this.transacciones[tarjeta.id] = res;
-            console.log('Transacciones para cuenta', tarjeta.numeroCuenta, res);
-          },
-          error: (err) => {
-            console.error('Error al cargar transacciones:', err);
-            this.errorMessage = 'No se pudieron cargar las transacciones.';
-          }
-        });
-    }
   }
-
 }

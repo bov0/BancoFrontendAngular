@@ -49,7 +49,7 @@ export class CrearTarjetaFormComponent implements OnInit {
   }
 
   onCrearTarjeta() {
-    console.log("CREANDO CUENTA, LIMITE DE CUENTA: " + this.limiteCredito + " NUMERO DE CUENTA ASOCIADA:" + this.cuentaSeleccionada);
+    console.log("CREANDO TARJETA, LIMITE DE TARJETA: " + this.limiteCredito + " NUMERO DE CUENTA ASOCIADA:" + this.cuentaSeleccionada);
     
     if (!this.cuentaSeleccionada || !this.limiteCredito) {
       console.error("Número de cuenta o límite de crédito no válido.");

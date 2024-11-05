@@ -54,3 +54,11 @@ color-scheme: light;
 --ring: 240 4.9% 83.9%;
 color-scheme: dark;
 }
+
+router-outlet + * {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+    width: 100%;
+}
