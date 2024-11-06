@@ -50,23 +50,41 @@ export class TableTransaccionesComponent implements OnInit {
     console.log('Transacciones recibidas:', this.transacciones);
   }
 
+  // Función para convertir fechas (maneja arrays de longitud 5 y 6)
   convertirFecha(fechaArray: number[]): string {
     if (fechaArray.length === 5) {
+      // Si la longitud es 5 (año, mes, día, hora, minuto)
+      const [year, month, day] = fechaArray;
+      const mesConCero = String(month).padStart(2, '0');
+      const diaConCero = String(day).padStart(2, '0');
+      return `${diaConCero}/${mesConCero}/${year}`;
+    } else if (fechaArray.length === 6) {
+      // Si la longitud es 6 (año, mes, día, hora, minuto, segundo)
       const [year, month, day] = fechaArray;
       const mesConCero = String(month).padStart(2, '0');
       const diaConCero = String(day).padStart(2, '0');
       return `${diaConCero}/${mesConCero}/${year}`;
     }
+
     return 'Fecha no válida';
   }
 
+  // Función para convertir hora (maneja arrays de longitud 5 y 6)
   convertirHora(fechaArray: number[]): string {
     if (fechaArray.length === 5) {
+      // Si la longitud es 5 (hora, minuto)
+      const [, , , hour, minute] = fechaArray;
+      const horaConCero = String(hour).padStart(2, '0');
+      const minutoConCero = String(minute).padStart(2, '0');
+      return `${horaConCero}:${minutoConCero}`;
+    } else if (fechaArray.length === 6) {
+      // Si la longitud es 6 (hora, minuto, segundo)
       const [, , , hour, minute] = fechaArray;
       const horaConCero = String(hour).padStart(2, '0');
       const minutoConCero = String(minute).padStart(2, '0');
       return `${horaConCero}:${minutoConCero}`;
     }
+
     return 'Hora no válida';
   }
 }

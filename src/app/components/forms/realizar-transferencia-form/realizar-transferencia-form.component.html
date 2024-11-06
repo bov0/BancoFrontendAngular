@@ -1,18 +1,26 @@
 <form action="" class="p-12 flex flex-col gap-10 items-center justify-center" #transferForm="ngForm">
     <div class="flex flex-col w-full">
-        <label for="saldo">Cuenta Bancaria para sustraer:</label>
+        <label for="cuentaOrigen">Cuenta Bancaria Origen:</label>
         <app-select 
             [selectPlaceHolder]="'Selecciona una cuenta bancaria'" 
             [options]="opcionesCuentas"
-            [(ngModel)]="cuentaPropiaSeleccionada" 
-            name="cuentaPropia"
+            [(ngModel)]="cuentaOrigenSeleccionada" 
+            name="cuentaOrigen"
         ></app-select>
     </div>
     <div class="flex flex-col w-full">
-        <label for="saldo">Cuenta Bancaria destino:</label>
+        <label for="cuentaDestino">Cuenta Bancaria destino:</label>
         <app-input-text 
             [(ngModel)]="cuentaDestinoSeleccionada" 
             placeholder="12 dígitos, ejemplo: 000123456789" 
+            name="cuentaDestino"
+        ></app-input-text>
+    </div>
+    <div class="flex flex-col w-full">
+        <label for="importe">Importe</label>
+        <app-input-text
+            [(ngModel)]="importe" 
+            placeholder="cantidad a enviar en EUR€" 
             name="cuentaDestino" 
         ></app-input-text>
     </div>
