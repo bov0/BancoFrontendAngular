@@ -2,87 +2,81 @@
 
   <div class="CuentasTarjetasWrapper w-full lg:w-3/6 flex flex-col justify-center items-center h-full">
     <h1 class="w-full py-6 text-left font-bold text-3xl ml-5 sm:ml-0">
-      DATOS DEL USUARIO: {{ authService.username.toUpperCase() }}
+      INFORMACIÓN DE LA CUENTA: {{ authService.username.toUpperCase() }}
     </h1>
     <div class="cuentasBancariasWrapper w-full flex flex-col items-center justify-center">
-      <div class="w-full pb-3 flex gap-3 items-center">
+      <div class="w-full p-3 flex gap-3 items-center justify-between rounded">
         <h2 class="text-left text-2xl font-semibold ml-5 sm:ml-0">Cuentas</h2>
+        <div class="flex gap-3">
+          <ng-template #crearCuentaModal>
+            <app-CrearCuentaForm></app-CrearCuentaForm>
+          </ng-template>
 
-        <ng-template #crearCuentaModal>
-          <app-CrearCuentaForm></app-CrearCuentaForm>
-        </ng-template>
-        
-        <app-modal
-          [modalTitle]="'Crear nueva cuenta'"
-          [contenidoButton]="'Crear Cuenta'"
-          [contenidoModal]="crearCuentaModal">
-        </app-modal>
+          <app-modal [modalTitle]="'Crear nueva cuenta'" [contenidoButton]="'+ Crear Cuenta'"
+            [contenidoModal]="crearCuentaModal">
+          </app-modal>
 
-        <ng-template #realizarTransferenciaModal>
-          <app-RealizarTransferenciaForm></app-RealizarTransferenciaForm>
-        </ng-template>
+          <ng-template #realizarTransferenciaModal>
+            <app-RealizarTransferenciaForm></app-RealizarTransferenciaForm>
+          </ng-template>
 
-        <app-modal
-          [modalTitle]="'Realizar Transferencia'"
-          [contenidoButton]="'Realizar Transferencia'"
-          [contenidoModal]="realizarTransferenciaModal">
-      </app-modal>
-      </div>
-      
-        <div class="flex flex-row overflow-y-auto p-6 gap-6 items-center w-full transition-all ease-in duration-100">
-          <div *ngFor="let cuenta of cuentasBancarias">
-            <app-cuentaCard
-              [numeroCuenta]="cuenta.numeroCuenta"
-              [saldo]="cuenta.saldo"
-              [tipoCuenta]="cuenta.tipoCuenta"
-              (click)="onCuentaSeleccionada(cuenta)">
-            </app-cuentaCard>
-          </div>
+          <app-modal [modalTitle]="'Realizar Transferencia'" [contenidoButton]="'Realizar Transferencia'"
+            [contenidoModal]="realizarTransferenciaModal">
+          </app-modal>
         </div>
       </div>
-    
-      <div class="tarjetasCreditoWrapper w-full h-full flex flex-col items-center justify-center">
-        <div class="w-full pb-3 flex gap-3 items-center">
-            <h2 class="text-left text-2xl font-semibold">Tarjetas de crédito</h2>
-            <ng-template #crearTarjetaModal>
-          <app-crearTarjetaForm></app-crearTarjetaForm>
-        </ng-template>
-        
-        <app-modal
-          [modalTitle]="'Crear nueva tarjeta'"
-          [contenidoButton]="'Crear tarjeta'"
-          [contenidoModal]="crearTarjetaModal">
-        </app-modal>
-          </div>
-        <div class="flex flex-row overflow-y-auto p-6 gap-6 items-center w-full transition-all ease-in duration-100">
-          <div class="w-full h-full bg-red-50"></div>
-          <div *ngFor="let tarjeta of tarjetasCredito">
-            <app-tarjetaCard
-              [numeroTarjeta]="tarjeta.numeroTarjeta"
-              [limiteCredito]="tarjeta.limiteCredito"
-              [fechaVencimiento]="tarjeta.fechaVencimiento"
-              [numeroCuenta]="tarjeta.cuentaBancaria.numeroCuenta"
-              (click)="onTarjetaSeleccionada(tarjeta)">
-            </app-tarjetaCard>
-          </div>
+
+      <div class="flex flex-row overflow-y-auto p-6 gap-6 items-center w-full transition-all ease-in duration-100">
+        <div *ngFor="let cuenta of cuentasBancarias">
+          <app-cuentaCard [numeroCuenta]="cuenta.numeroCuenta" [saldo]="cuenta.saldo" [tipoCuenta]="cuenta.tipoCuenta"
+            (click)="onCuentaSeleccionada(cuenta)">
+          </app-cuentaCard>
         </div>
       </div>
+    </div>
+
+    <div class="tarjetasCreditoWrapper w-full h-full flex flex-col items-center justify-center">
+      <div class="w-full p-3 flex gap-3 items-center justify-between rounded">
+        <h2 class="text-left text-2xl font-semibold">Tarjetas de crédito</h2>
+
+        <div class="flex gap-3">
+          <ng-template #crearTarjetaModal>
+            <app-crearTarjetaForm></app-crearTarjetaForm>
+          </ng-template>
+
+          <app-modal [modalTitle]="'Crear nueva tarjeta'" [contenidoButton]="'+ Crear tarjeta'"
+            [contenidoModal]="crearTarjetaModal">
+          </app-modal>
+        </div>
+
+      </div>
+      <div class="flex flex-row overflow-y-auto p-6 gap-6 items-center w-full transition-all ease-in duration-100">
+        <div class="w-full h-full bg-red-50"></div>
+        <div *ngFor="let tarjeta of tarjetasCredito">
+          <app-tarjetaCard [numeroTarjeta]="tarjeta.numeroTarjeta" [limiteCredito]="tarjeta.limiteCredito"
+            [fechaVencimiento]="tarjeta.fechaVencimiento" [numeroCuenta]="tarjeta.cuentaBancaria.numeroCuenta"
+            (click)="onTarjetaSeleccionada(tarjeta)">
+          </app-tarjetaCard>
+        </div>
+      </div>
+    </div>
   </div>
-  
+
   <div class="TransaccionesWrapper w-full lg:w-3/6 flex flex-col items-center justify-center h-full">
-    <h2 *ngIf="cuentaSeleccionada" class="w-full pb-3 text-center text-2xl font-semibold ml-5 sm:ml-0">Transacciones</h2>
+    <h2 *ngIf="cuentaSeleccionada" class="w-full pb-3 text-center text-2xl font-semibold ml-5 sm:ml-0">Transacciones
+    </h2>
     <div *ngIf="cuentaSeleccionada" class="w-full mb-6 flex flex-col items-center justify-center">
       <div *ngIf="!transacciones[cuentaSeleccionada.id] || transacciones[cuentaSeleccionada.id].length <= 0">
-          <p class="text-gray-400 text-center w-full">No hay transacciones para el metodo seleccionado</p>
+        <p class="text-gray-400 text-center w-full">No hay transacciones para el metodo seleccionado</p>
       </div>
-  
-      <app-transacciones-table 
-        class="flex flex-col items-center justify-center pb-12"
+
+      <app-transacciones-table class="flex flex-col items-center justify-center pb-12"
         *ngIf="cuentaSeleccionada && transacciones[cuentaSeleccionada.id]?.length > 0"
         [transacciones]="transacciones[cuentaSeleccionada.id]"
         [cuentaNumero]="cuentaSeleccionada.numeroCuenta || cuentaSeleccionada.numeroTarjeta">
         <hlm-caption class="pb-6">
-            Transacciones para {{ cuentaSeleccionada.numeroCuenta ? cuentaSeleccionada.numeroCuenta : cuentaSeleccionada.numeroTarjeta }}
+          Transacciones para {{ cuentaSeleccionada.numeroCuenta ? cuentaSeleccionada.numeroCuenta :
+          cuentaSeleccionada.numeroTarjeta }}
         </hlm-caption>
       </app-transacciones-table>
 

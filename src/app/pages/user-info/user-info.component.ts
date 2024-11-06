@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { CuentaCardDetailsComponent } from '../../components/cuenta-card-details/cuenta-card-details.component';
 import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
 import { TarjetaCardDetailsComponent } from '../../components/tarjeta-card-details/tarjeta-card-details.component';
-import { catchError, forkJoin, of, throwError } from 'rxjs';
+import { catchError, forkJoin, of, Subscription, throwError } from 'rxjs';
 import { ButtonComponent } from '../../components/button/button.component';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { CrearCuentaFormComponent } from '../../components/forms/crear-cuenta-form/crear-cuenta-form.component';
@@ -29,6 +29,8 @@ export class UserInfoComponent {
   transacciones: any[] = [];
   errorMessage: string = '';
   cuentaSeleccionada: any = null;
+  isLoggedIn: boolean = false;  
+  private subscription: Subscription | undefined;
 
   constructor(
     public authService: AuthService,
@@ -37,7 +39,11 @@ export class UserInfoComponent {
   ) {}
 
   ngOnInit() {
-    if (!this.authService.isLoggedIn.value) {
+    this.subscription = this.authService.isLoggedIn.subscribe(loggedIn => {
+      this.isLoggedIn = loggedIn;
+    });
+
+    if (!this.isLoggedIn) {
       this.router.navigate(['/']);
     } else {
       const token = this.authService.JWT;

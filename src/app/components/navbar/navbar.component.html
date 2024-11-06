@@ -31,7 +31,12 @@
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
-              <a routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{exact : true}" class="px-3 py-2 text-sm font-semibold text-gray-800 hover:text-purple-600" aria-current="page">Login</a>
+              @if (isLoggedIn) {
+                <button disabled routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{exact : true}" class="px-3 py-2 text-sm font-semibold text-gray-400" aria-current="page">Login</button>
+              } @else {
+                <a routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{exact : true}" class="px-3 py-2 text-sm font-semibold text-gray-800 hover:text-purple-600" aria-current="page">Login</a>
+              }
+              
               <a routerLink="/register" routerLinkActive="active" [routerLinkActiveOptions]="{exact : true}" ariaCurrentWhenActive="page" class="=px-3 py-2 text-sm font-semibold text-gray-800 hover:text-purple-600">Register</a>
             </div>
           </div>
